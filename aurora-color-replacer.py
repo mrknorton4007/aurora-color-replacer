@@ -8,11 +8,13 @@ class AuroraColorReplacer:
 
     def __init__(self, theme_name):
         # current dir
-        self.base_path = os.getcwd()
-        # name of the folder containing the original files
-        self.source_folder_name = "_input"
-        # name of the folder that will contain the edited files
-        self.output_folder_name = "_output"
+        base_path = os.getcwd()
+        # name of the folders containing original and edited files
+        source_folder_name = "_input"
+        output_folder_name = "_output"
+        # their real full paths
+        self.source_folder = os.path.join(base_path, source_folder_name)
+        self.output_folder = os.path.join(base_path, output_folder_name)
         # import color replacing rules
         self.theme_rules = self._import_theme(theme_name)
         # check folder structure
@@ -30,10 +32,8 @@ class AuroraColorReplacer:
 
     def _integrity_folder_check(self):
         # ensure that input/output folders exists
-        source_folder = os.path.join(self.base_path, self.source_folder_name)
-        output_folder = os.path.join(self.base_path, self.output_folder_name)
 
-        for directory in [source_folder, output_folder]:
+        for directory in [self.source_folder, self.output_folder]:
             if not os.path.exists(directory):
                 # let the script raise an OSError and exit in case
                 # user doesnt have the correct permissions.
@@ -50,13 +50,30 @@ class AuroraColorReplacer:
 
     def recolor_file(self, filename):
         # given a xui file, writes the recolored one
-        pass
+        source_file = os.path.join(self.source_folder, filename)
+        output_file = os.path.join(self.output_folder, filename)
+
+        source_stream = open(source_file, "r")
+        output_stream = open(output_file, "w")
+
+        line_replaced = 0
+        for line in source_stream:
+            new_line = self.recolor_line(line)
+            output_stream.write(new_line)
+            if line != new_line:
+                print("Replaced %s with %s." % (line, new_line))
+                line_replaced += 1
+
+        source_stream.close()
+        output_stream.close()
+
+        print("Replaced %s colors in %s file." % (line_replaced, filename))
+        return True
 
     def recolor_folder(self):
         # find all source files and recolor them
-        source_folder = os.path.join(self.base_path, self.source_folder_name)
 
-        for entry in os.listdir(source_folder):
+        for entry in os.listdir(self.source_folder):
 
             # silently ignore gitkeep file
             if entry == '.gitkeep':
@@ -67,8 +84,7 @@ class AuroraColorReplacer:
                 print("{filename} is not a xui file. Skipped.".format(filename=entry))
                 continue
 
-            target_file = os.path.join(source_folder, entry)
-            self.recolor_file(target_file)
+            self.recolor_file(entry)
 
 
 if __name__ == "__main__":
