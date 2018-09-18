@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+import importlib
 
 
 class AuroraColorReplacer:
@@ -19,7 +20,13 @@ class AuroraColorReplacer:
 
     def _import_theme(self, theme_name):
         # check and import py module with the replace rules
-        pass
+        try:
+            theme_module = "themes." + theme_name
+            selected_theme = importlib.import_module(theme_module)
+        except ImportError as ex:
+            sys.exit(ex)
+
+        return selected_theme.replace_list
 
     def _integrity_folder_check(self):
         # ensure that input/output folders exists
