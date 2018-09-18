@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-import os
-import sys
+import os, sys
 import importlib
 
 
@@ -22,6 +21,7 @@ class AuroraColorReplacer:
 
     def _import_theme(self, theme_name):
         # check and import py module with the replace rules
+
         try:
             theme_module = "themes." + theme_name
             selected_theme = importlib.import_module(theme_module)
@@ -40,13 +40,15 @@ class AuroraColorReplacer:
                 os.mkdir(directory)
         return True
 
-    def _get_replaced_line(self, xml_tag):
+    def _get_recolored_line(self, xml_tag):
         # given a xml line, find a matching rule
-        pass
+        # or return the original if rule not found
 
-    def recolor_line(self, xml_tag):
-        # given a xml line, writes the recolored one
-        pass
+        for rule, value in self.theme_rules.items():
+            if xml_tag.startswith(rule[0]+rule[1]):
+                return xml_tag.replace(rule[1], value)
+
+        return xml_tag
 
     def recolor_file(self, filename):
         # given a xui file, writes the recolored one
@@ -58,7 +60,7 @@ class AuroraColorReplacer:
 
         line_replaced = 0
         for line in source_stream:
-            new_line = self.recolor_line(line)
+            new_line = self._get_recolored_line(line)
             output_stream.write(new_line)
             if line != new_line:
                 print("Replaced %s with %s." % (line, new_line))
