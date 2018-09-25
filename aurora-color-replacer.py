@@ -2,6 +2,9 @@
 import os, sys
 import importlib
 
+# from themes import MetroColorBlue, MetroColorRed
+# from themes import SteamOS
+
 
 class AuroraColorReplacer:
 
@@ -28,7 +31,7 @@ class AuroraColorReplacer:
         except ImportError as ex:
             sys.exit(ex)
 
-        return selected_theme.replace_list
+        return selected_theme.theme_rules
 
     def _integrity_folder_check(self):
         # ensure that input/output folders exists
