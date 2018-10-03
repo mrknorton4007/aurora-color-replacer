@@ -8,15 +8,19 @@ import importlib
 
 class AuroraColorReplacer:
 
+    # name of the folders containing original and edited files
+    INPUT_FOLDER = "_input"
+    OUTPUT_FOLDER = "_output"
+
+    # enable verbose mode, only for dev
+    DEBUG_MODE = False
+
     def __init__(self, theme_name):
         # current dir
         base_path = os.getcwd()
-        # name of the folders containing original and edited files
-        source_folder_name = "_input"
-        output_folder_name = "_output"
-        # their real full paths
-        self.source_folder = os.path.join(base_path, source_folder_name)
-        self.output_folder = os.path.join(base_path, output_folder_name)
+        # input/output folders full paths
+        self.source_folder = os.path.join(base_path, self.INPUT_FOLDER)
+        self.output_folder = os.path.join(base_path, self.OUTPUT_FOLDER)
         # import color replacing rules
         self.theme_rules = self._import_theme(theme_name)
         # check folder structure
@@ -66,7 +70,8 @@ class AuroraColorReplacer:
             new_line = self._get_recolored_line(line)
             output_stream.write(new_line)
             if line != new_line:
-                print("Replaced %s with %s." % (line, new_line))
+                if self.DEBUG_MODE:
+                    print("Replaced %s with %s." % (line, new_line))
                 line_replaced += 1
 
         source_stream.close()
