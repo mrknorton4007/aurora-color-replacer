@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # #####################################
 # SteamOS theme
-# Version: v1.0.0
+# Version: v1.1.0
 # Author: mrknorton4007
 # #####################################
 
@@ -18,10 +18,6 @@ theme_rules = {
     ('<Prop>', '0xff33e5a8'): '0xff33e5a8', # aquamarine
     ('<Prop>', '0xff444444'): '0xffebebeb',
     ('<Prop>', '0xff55b696'): '0xff55b696', # dark aquamarine
-    ('<Prop>', '0xffaaaaaa'): '0xffebebeb',
-    ('<Prop>', '0xffdddddd'): '0xffebebeb',
-    ('<Prop>', '0xffeeeeee'): '0xff262626',
-    ('<Prop>', '0xffffffff'): '0xff262626',
     # StrokeColor
     ('<StrokeColor>', '0xff000000'): '0xff000000',
     ('<StrokeColor>', '0xff0f0f80'): '0xff666666',
